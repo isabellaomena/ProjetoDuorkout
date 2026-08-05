@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Duorkout ✨</title>
+
+  <!-- Favicon Coração Rosa -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #140d12;
+      --bg-sidebar: #1d121b;
+      --bg-card: rgba(35, 22, 32, 0.75);
+      --bg-glass: rgba(255, 182, 193, 0.03);
+      --border-pink: rgba(255, 105, 180, 0.25);
+      --border-gold: rgba(212, 175, 55, 0.35);
+      --pink-primary: #ff69b4;
+      --pink-light: #ffb6c1;
+      --pink-soft: #f8c8dc;
+      --gold-accent: #d4af37;
+      --text-main: #ffffff;
+      --text-muted: #a692a0;
+      --shadow-pink: 0 8px 32px 0 rgba(255, 105, 180, 0.15);
+      --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.2);
+
+      --font-title: 'Cinzel', serif;
+      --font-quote: 'Playfair Display', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-pink);
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      position: fixed;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .brand-area {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-pink);
+    }
+
+    .brand-title {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--pink-light);
+    }
+
+    .brand-subtitle {
+      font-family: var(--font-quote);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--gold-accent);
+      margin-top: 6px;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 14px 18px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-glass);
+      color: var(--pink-light);
+      border-color: rgba(255, 105, 180, 0.1);
+    }
+
+    .nav-btn.active {
+      background: rgba(255, 105, 180, 0.12);
+      border-color: var(--border-pink);
+      color: var(--pink-light);
+      box-shadow: var(--shadow-pink);
+    }
+
+    .main-wrapper {
+      margin-left: 280px;
+      flex: 1;
+      padding: 40px;
+      max-width: 1200px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(35, 22, 32, 0.9) 0%, rgba(20, 13, 18, 0.95) 100%);
+      border: 1px solid var(--border-pink);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .profile-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .user-tag {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-accent);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .user-name {
+      font-family: var(--font-title);
+      font-size: 2.4rem;
+      color: var(--text-main);
+    }
+
+    .user-motto {
+      font-family: var(--font-quote);
+      font-style: italic;
+      color: var(--pink-light);
+      font-size: 1.1rem;
+      margin-top: 6px;
+    }
+
+    .user-badges {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-pink);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: var(--shadow-pink);
+      margin-bottom: 25px;
+    }
+
+    .card-gold {
+      border-color: var(--border-gold);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .card-title {
+      font-family: var(--font-title);
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: var(--gold-accent);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cal-nav-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-pink);
+      color: var(--pink-light);
+      font-family: var(--font-sans);
+      cursor: pointer;
+      border-radius: 8px;
+      width: 28px;
+      height: 28px;
+      font-size: 0.85rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .cal-nav-btn:hover {
+      background: rgba(255, 105, 180, 0.15);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .metric-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .metric-num {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      color: var(--pink-light);
+      font-weight: 700;
+    }
+
+    .metric-num.gold {
+      color: var(--gold-accent);
+    }
+
+    .metric-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .calendar-head {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--gold-accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+    }
+
+    .day {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      position: relative;
+    }
+
+    .day.today {
+      border-color: var(--pink-light);
+      box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+      font-weight: bold;
+    }
+
+    .day.trained {
+      background: rgba(255, 105, 180, 0.35);
+      border-color: var(--pink-primary);
+      color: #fff;
+    }
+
+    .day.saved {
+      background: rgba(212, 175, 55, 0.3);
+      border-color: var(--gold-accent);
+      color: var(--gold-accent);
+    }
+
+    .day.lost {
+      background: rgba(50, 50, 50, 0.5);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #666;
+    }
+
+    .day.empty {
+      background: transparent;
+      border: none;
+    }
+
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .calendar-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .vending-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 25px;
+      background: linear-gradient(180deg, #1f121b 0%, #0d080c 100%);
+      border: 2px solid var(--pink-primary);
+      border-radius: 24px;
+      padding: 25px;
+      box-shadow: 0 0 35px rgba(255, 105, 180, 0.25);
+    }
+
+    .vending-glass {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-pink);
+      border-radius: 16px;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+
+    .capsule {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-pink);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .capsule:hover {
+      background: rgba(255, 105, 180, 0.08);
+    }
+
+    .capsule-code {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.65rem;
+      color: var(--gold-accent);
+      font-weight: bold;
+    }
+
+    .capsule-title {
+      font-size: 0.75rem;
+      color: var(--text-main);
+      margin-top: 15px;
+      min-height: 2.8em;
+      line-height: 1.3;
+    }
+
+    .capsule-price {
+      font-size: 0.7rem;
+      color: var(--pink-light);
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    .vending-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .keypad-display {
+      background: #000;
+      border: 1px solid var(--gold-accent);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 1.4rem;
+      color: var(--gold-accent);
+      letter-spacing: 4px;
+      box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.3);
+      margin-bottom: 15px;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .num-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-pink);
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .buy-btn {
+      background: linear-gradient(135deg, var(--pink-primary), #b00d62);
+      border: none;
+      color: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .remove-btn {
+      background: linear-gradient(135deg, #8a1414, #4a0a0a);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 11px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      opacity: 0.85;
+    }
+
+    .remove-btn:hover {
+      opacity: 1;
+    }
+
+    .vending-tray {
+      background: #050505;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      min-height: 60px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .trophy-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .trophy-item {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0.4;
+    }
+
+    .trophy-item.unlocked {
+      opacity: 1;
+      border-color: var(--pink-primary);
+      background: rgba(255, 105, 180, 0.05);
+    }
+
+    .trophy-name {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .trophy-item.unlocked .trophy-name {
+      color: var(--pink-light);
+      font-weight: 600;
+    }
+
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      background: rgba(0,0,0,0.3);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border-left: 3px solid var(--pink-primary);
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .manifesto-box {
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.1) 0%, rgba(20, 13, 18, 0.95) 100%);
+      border: 1px solid var(--border-pink);
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 25px;
+      font-family: var(--font-quote);
+      font-style: italic;
+      color: var(--pink-light);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      text-align: center;
+      box-shadow: var(--shadow-pink);
+    }
+
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .quote-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-pink);
+      border-radius: 14px;
+      padding: 20px;
+      font-family: var(--font-quote);
+      font-style: italic;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .rule-card {
+      background: var(--bg-card);
+      border-left: 4px solid var(--pink-primary);
+      border-radius: 8px 16px 16px 8px;
+      padding: 20px;
+    }
+
+    .rule-title {
+      font-size: 0.95rem;
+      color: var(--pink-light);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .rule-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .milestone-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .milestone-box {
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      opacity: 0.45;
+    }
+
+    .milestone-box.done {
+      opacity: 1;
+      border-color: var(--gold-accent);
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    .milestone-days {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      color: var(--pink-light);
+    }
+
+    .milestone-reward {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .add-product-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .form-input {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-pink);
+      border-radius: 8px;
+      padding: 10px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(15px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 2px solid var(--border-pink);
+      border-radius: 24px;
+      padding: 35px;
+      width: 90%;
+      max-width: 480px;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-title {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      color: var(--pink-light);
+      margin-bottom: 15px;
+    }
+
+    .modal-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-yes { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; }
+    .btn-no { background: linear-gradient(135deg, #c62828, #b71c1c); color: #fff; }
+    .btn-gold { background: linear-gradient(135deg, var(--gold-accent), #997a15); color: #fff; }
+
+    .dice-container {
+      font-size: 4rem;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="brand-area">
+      <div class="brand-title">🎀 DUORKOUT 🎀</div>
+      <div class="brand-subtitle">A disciplina é romântica. ♡</div>
+    </div>
+
+    <nav class="nav-menu">
+      <button class="nav-btn active" onclick="switchTab('perfil', this)">
+        <span>👑</span> <span>Perfil</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('loja', this)">
+        <span>🛍️</span> <span>Lojinha <span id="nav-shop-level">Nível Fada</span></span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('motivacao', this)">
+        <span>✨</span> <span>Motivação</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('regras', this)">
+        <span>📜</span> <span>Manual & Regras</span>
+      </button>
+    </nav>
+  </aside>
+
+  <main class="main-wrapper">
+
+    <!-- PERFIL -->
+    <section id="tab-perfil" class="tab-content active">
+      <div class="hero-banner">
+        <div class="profile-meta">
+          <div>
+            <div class="user-tag" id="ui-level">NÍVEL: FADA</div>
+            <div class="user-name" id="ui-name">Isa Omena ✨</div>
+            <div class="user-motto">"A DISCIPLINA É ROMÂNTICA. ♡"</div>
+            <div class="user-badges" id="ui-profile-badges"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card card-gold">
+          <div class="card-title">
+            <span>Status da Jornada</span> <span>✨</span>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-num" id="ui-streak">0</div>
+              <div class="metric-label">Ofensiva Atual</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-num gold" id="ui-max-streak">0</div>
+              <div class="metric-label">Maior Ofensiva</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-num" id="ui-saves">3</div>
+              <div class="metric-label">Saves Restantes</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-num gold" id="ui-isabucks">0</div>
+              <div class="metric-label">Isabucks</div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 10px;">
+            Meta Atual: <strong id="ui-goal-target" style="color: var(--pink-light);">20 Dias</strong>
+            (Recompensa: <span id="ui-goal-reward" style="color: var(--gold-accent);">20</span> Isabucks)
+            <button onclick="promptNewGoal()" style="background: transparent; border: none; color: var(--gold-accent); cursor: pointer; text-decoration: underline; margin-left: 8px;">Alterar</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <button class="cal-nav-btn" onclick="changeCalendarMonth(-1)" title="Mês anterior">◀</button>
+            <span id="ui-calendar-month">Julho 2026</span>
+            <button class="cal-nav-btn" onclick="changeCalendarMonth(1)" title="Próximo mês">▶</button>
+          </div>
+          <div class="calendar-head">
+            <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span>
+          </div>
+          <div class="calendar-grid" id="ui-calendar-grid"></div>
+          <div class="calendar-legend">
+            <span><span class="legend-dot" style="background: rgba(255,105,180,0.6); border:1px solid var(--pink-primary);"></span> Treinado</span>
+            <span><span class="legend-dot" style="background: rgba(212,175,55,0.5); border:1px solid var(--gold-accent);"></span> Save usado</span>
+            <span><span class="legend-dot" style="background: rgba(50,50,50,0.7); border:1px solid rgba(255,255,255,0.1);"></span> Ofensiva perdida</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Milestones de Ofensiva</span> <span>🏅</span>
+        </div>
+        <div class="milestone-list" id="ui-milestone-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Colecionáveis Eras (<span id="ui-collectibles-count">0</span>/11)</span> <span>🏆</span>
+        </div>
+        <div class="trophy-grid" id="ui-trophy-grid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Histórico de Compras & Atividades</span> <span>🛍️</span>
+        </div>
+        <div class="history-list" id="ui-history-list"></div>
+      </div>
+    </section>
+
+    <!-- LOJA -->
+    <section id="tab-loja" class="tab-content">
+      <div class="card-title" style="font-size: 1.2rem; margin-bottom: 25px;">
+        <span>Lojinha - <span id="ui-shop-level">Nível Fada</span> 💋</span>
+        <span style="color: var(--pink-light)"><span id="ui-shop-isabucks">0</span> ISABUCKS</span>
+      </div>
+
+      <div class="vending-container">
+        <div class="vending-glass" id="ui-vending-items"></div>
+
+        <div class="vending-panel">
+          <div>
+            <div class="keypad-display" id="ui-keypad-code">__</div>
+            <div class="numpad">
+              <button class="num-btn" onclick="pressNum('1')">1</button>
+              <button class="num-btn" onclick="pressNum('2')">2</button>
+              <button class="num-btn" onclick="pressNum('3')">3</button>
+              <button class="num-btn" onclick="pressNum('4')">4</button>
+              <button class="num-btn" onclick="pressNum('5')">5</button>
+              <button class="num-btn" onclick="pressNum('6')">6</button>
+              <button class="num-btn" onclick="pressNum('7')">7</button>
+              <button class="num-btn" onclick="pressNum('8')">8</button>
+              <button class="num-btn" onclick="pressNum('9')">9</button>
+              <button class="num-btn" onclick="clearNum()" style="color: var(--pink-light)">C</button>
+              <button class="num-btn" onclick="pressNum('0')">0</button>
+              <button class="num-btn" onclick="clearNum()" style="color: var(--pink-light)">⌫</button>
+            </div>
+            <button class="buy-btn" onclick="executePurchase()">RESGATAR ITEM 🎀</button>
+            <button class="remove-btn" onclick="removeShopItem()">🗑️ REMOVER ITEM DA LOJINHA</button>
+          </div>
+          <div class="vending-tray" id="ui-vending-tray">Bandeja de Saída</div>
+        </div>
+      </div>
+
+      <!-- PAINEL DE ADICIONAR PRODUTOS QUANDO SUBIR DE NÍVEL -->
+      <div class="card" style="margin-top: 30px;">
+        <div class="card-title">
+          <span>Cadastrar Novo Produto na Lojinha</span> <span>➕</span>
+        </div>
+        <div class="add-product-form">
+          <input type="text" id="new-item-code" class="form-input" placeholder="Código (ex: 47)" maxlength="2">
+          <input type="text" id="new-item-name" class="form-input" placeholder="Nome da Recompensa">
+          <input type="number" id="new-item-price" class="form-input" placeholder="Preço (Isabucks)">
+          <select id="new-item-collectible" class="form-input">
+            <option value="false">Item Comum (Não acaba)</option>
+            <option value="true">Colecionável (Sumi ao comprar)</option>
+          </select>
+          <button class="btn-action btn-gold" onclick="addNewShopItem()" style="grid-column: span 2;">Adicionar à Lojinha ✨</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOTIVAÇÃO -->
+    <section id="tab-motivacao" class="tab-content">
+      <div class="card-title" style="font-size: 1.2rem; margin-bottom: 25px;">
+        <span>Motivação & Manifesto</span> <span>✨</span>
+      </div>
+
+      <div class="manifesto-box">
+        "Now starts an unstoppable era of miracles, wealth, health, love, success,
+        abundance, alignment, clarity, freedom, confidence, creativity, ease,
+        dream self embodiment, joy, self trust, prosperity, vitality, radiance,
+        purpose, riches, beauty, fulfillment, overflow of good things, stability,
+        recognition and peace."
+      </div>
+
+      <div class="card" style="text-align: center; padding: 20px; margin-bottom: 25px;">
+        <div style="font-family: var(--font-title); font-size: 1.5rem; color: var(--pink-light); letter-spacing: 2px;">
+          PROJETO DUORKOUT
+        </div>
+        <div style="font-family: var(--font-quote); font-style: italic; color: var(--gold-accent); margin-top: 5px;">
+          Isa Omena — A DISCIPLINA É ROMÂNTICA. ♡
+        </div>
+      </div>
+
+      <div class="quotes-grid">
+        <div class="quote-box">"she's not lucky, she's disciplined ♡"</div>
+        <div class="quote-box">"dear me, I chose me. ♡"</div>
+        <div class="quote-box">"main character energy ✨"</div>
+        <div class="quote-box">"A little romantic, a lot independent. ♡"</div>
+        <div class="quote-box">"MAKE YOURSELF PROUD."</div>
+        <div class="quote-box">"I love hard, dream bigger, and mind my business."</div>
+        <div class="quote-box">"I fall for souls, not faces 💋"</div>
+        <div class="quote-box">"don't call it a dream, call it a plan. 🎀"</div>
+        <div class="quote-box">"good things take time. ♡"</div>
+        <div class="quote-box">"xoxo girl boss 💅"</div>
+      </div>
+    </section>
+
+    <!-- MANUAL DE REGRAS -->
+    <section id="tab-regras" class="tab-content">
+      <div class="card-title" style="font-size: 1.2rem; margin-bottom: 25px;">
+        <span>Manual de Regras & Diretrizes</span> <span>📜</span>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-title">Mínimo Diário ⏱️</div>
+          <div class="rule-desc">10 minutos de exercício físico intencional. Tarefas do dia a dia ou jogos recreativos não contam.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-title">Sistema de Saves 🛡️</div>
+          <div class="rule-desc">3 saves por mês. Usar um save mantém a ofensiva viva. Zerar os saves e faltar de novo zera a ofensiva. Reset mensal para 3 saves.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-title">Níveis do Duorkout 👑</div>
+          <div class="rule-desc">Fada (até 50d), Sereia (50-125d), Bruxa (125-250d) e Deusa (250-365d).</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-title">Recompensas 🛍️</div>
+          <div class="rule-desc">Treino: +3 Isabucks. Semana perfeita (7 dias sem pular): +7 Isabucks. Mês perfeito: Giro de D6 com privilégios.</div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <a href="https://drive.google.com/file/d/1cIkuJdxGBQz7DygMF27XFU8A5r5oeabH/view?usp=sharing" target="_blank" class="btn-action btn-gold">
+          📖 Abrir PDF Completo de Regras (Google Drive)
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAIS -->
+  <div class="modal-overlay" id="modal-daily">
+    <div class="modal-box">
+      <div class="modal-title">REGISTRO DE TREINO 🎀</div>
+      <div class="modal-desc" id="modal-daily-text">Você treinou no dia XX/XX/XXXX?</div>
+      <div class="modal-actions">
+        <button class="btn-action btn-yes" onclick="answerDaily(true)">✅ SIM (+3 Isabucks)</button>
+        <button class="btn-action btn-no" onclick="answerDaily(false)">❌ NÃO (Usar Save)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-dice">
+    <div class="modal-box">
+      <div class="modal-title">MÊS PERFEITO! 🎉</div>
+      <div class="modal-desc">Você treinou todos os dias do mês! Hora de rolar o dado da sorte...</div>
+      <div class="dice-container" id="dice-display">🎲</div>
+      <div class="modal-desc" id="dice-result-text"></div>
+      <div class="modal-actions">
+        <button class="btn-action btn-gold" id="dice-roll-btn" onclick="rollDice()">ROLAR O D6 🎲</button>
+        <button class="btn-action btn-gold" id="dice-continue-btn" style="display:none;" onclick="closeDiceModal()">CONTINUAR ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-alert">
+    <div class="modal-box">
+      <div class="modal-title" id="modal-alert-title">MENSAGEM</div>
+      <div class="modal-desc" id="modal-alert-msg">Conteúdo do alerta</div>
+      <div class="modal-actions">
+        <button class="btn-action btn-gold" onclick="closeModalAlert()">CONTINUAR ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+       CATÁLOGO DA LOJINHA
+    ============================================================ */
+    const INITIAL_CATALOG = [
+      { code: "01", name: "Taylor Swift Debut Album Listen", price: 5, collectible: true, id: "debut", emoji: "🎸" },
+      { code: "02", name: "15 minutos praticando a gratidão", price: 5, collectible: false },
+      { code: "03", name: "Assistir YT enquanto marca livro favorito", price: 10, collectible: false },
+      { code: "04", name: "Organizar o quarto", price: 10, collectible: false },
+      { code: "05", name: "Organizar a playlist 2026 in Songs", price: 10, collectible: false },
+      { code: "06", name: "Taylor Swift Fearless Album Listen", price: 10, collectible: true, id: "fearless", emoji: "⚡" },
+      { code: "07", name: "Chocolate quente pra começar bem o dia", price: 15, collectible: false },
+      { code: "08", name: "Ouvir um álbum novo", price: 15, collectible: false },
+      { code: "09", name: "Fazer as unhas das mãos", price: 15, collectible: false },
+      { code: "10", name: "Speak Now Taylor Swift Album Listen", price: 20, collectible: true, id: "speaknow", emoji: "💜" },
+      { code: "11", name: "Escrever uma página do Journal", price: 20, collectible: false },
+      { code: "12", name: "Pular os 15 min de estudo do dia", price: 20, collectible: false },
+      { code: "13", name: "Um dia off das comparações", price: 30, collectible: false },
+      { code: "14", name: "Red Taylor Swift Album Listen", price: 30, collectible: true, id: "red", emoji: "🧣" },
+      { code: "15", name: "Dia do fds sem pensar em escola", price: 30, collectible: false },
+      { code: "16", name: "Dormir depois das 23h sem culpa", price: 30, collectible: false },
+      { code: "17", name: "Se arrumar ouvindo música só porque sim", price: 30, collectible: false },
+      { code: "18", name: "Hora do karaoke", price: 30, collectible: false },
+      { code: "19", name: "1 hora de YouTube de fofoca", price: 30, collectible: false },
+      { code: "20", name: "Ler o livro que quiser sem culpa", price: 30, collectible: false },
+      { code: "21", name: "30 min de TikTok Slytherin Boys", price: 30, collectible: false },
+      { code: "22", name: "Criar um vision board", price: 35, collectible: false },
+      { code: "23", name: "Organizar roupas no app vendo algo", price: 35, collectible: false },
+      { code: "24", name: "Noite de quizzes The Office/Taylor Swift", price: 40, collectible: false },
+      { code: "25", name: "Momento desabafo com ChatGPT", price: 40, collectible: false },
+      { code: "26", name: "1989 Taylor Swift Album Listen", price: 45, collectible: true, id: "1989", emoji: "🩵" },
+      { code: "27", name: "30 minutos de TikTok", price: 45, collectible: false },
+      { code: "28", name: "Reassistir um guilty pleasure", price: 50, collectible: false },
+      { code: "29", name: "Reputation Taylor Swift Album Listen", price: 50, collectible: true, id: "reputation", emoji: "🐍" },
+      { code: "30", name: "Momento performático com música", price: 50, collectible: false },
+      { code: "31", name: "30 min de fanfic / Character AI", price: 50, collectible: false },
+      { code: "32", name: "Dois ASMRs", price: 50, collectible: false },
+      { code: "33", name: "Lover Taylor Swift Album Listen", price: 50, collectible: true, id: "lover", emoji: "🩷" },
+      { code: "34", name: "Noite de filmes com pipoca", price: 60, collectible: false },
+      { code: "35", name: "Folklore Taylor Swift Album Listen", price: 60, collectible: true, id: "folklore", emoji: "🩶" },
+      { code: "36", name: "Save extra", price: 70, collectible: false, isSaveExtra: true },
+      { code: "37", name: "Evermore Taylor Swift Album Listen", price: 70, collectible: true, id: "evermore", emoji: "🤎" },
+      { code: "38", name: "Uma refeição a mais no dia", price: 70, collectible: false },
+      { code: "39", name: "Receitas de microondas", price: 70, collectible: false },
+      { code: "40", name: "Midnights Taylor Swift Album Listen", price: 80, collectible: true, id: "midnights", emoji: "💙" },
+      { code: "41", name: "30 minutos de Amor Doce", price: 80, collectible: false },
+      { code: "42", name: "The Tortured Poets Department Album Listen", price: 90, collectible: true, id: "ttpd", emoji: "🤍" },
+      { code: "43", name: "2 horas jogando", price: 100, collectible: false },
+      { code: "44", name: "Dia de descanso total (1 save)", price: 100, collectible: false },
+      { code: "45", name: "The Life of a Showgirl Album Listen", price: 100, collectible: true, id: "showgirl", emoji: "✨" },
+      { code: "46", name: "Passe pra ir pra casa da Isabelle", price: 111, collectible: false, gives2Saves: true }
+    ];
+
+    const COLLECTIBLES_LIST = [
+      { id: "debut", name: "Debut Album", emoji: "🎸" },
+      { id: "fearless", name: "Fearless Album", emoji: "⚡" },
+      { id: "speaknow", name: "Speak Now Album", emoji: "💜" },
+      { id: "red", name: "Red Album", emoji: "🧣" },
+      { id: "1989", name: "1989 Album", emoji: "🩵" },
+      { id: "reputation", name: "Reputation Album", emoji: "🐍" },
+      { id: "lover", name: "Lover Album", emoji: "🩷" },
+      { id: "folklore", name: "Folklore Album", emoji: "🩶" },
+      { id: "evermore", name: "Evermore Album", emoji: "🤎" },
+      { id: "midnights", name: "Midnights Album", emoji: "💙" },
+      { id: "showgirl", name: "The Life of a Showgirl", emoji: "✨" }
+    ];
+
+    /* ============================================================
+       REGRAS: milestones, níveis e limites (fonte: PDF do projeto)
+    ============================================================ */
+    const MILESTONES = [
+      { days: 3,   reward: 3 },
+      { days: 7,   reward: 7 },
+      { days: 13,  reward: 13 },
+      { days: 30,  reward: 25 },
+      { days: 60,  reward: 40 },
+      { days: 77,  reward: 50 },
+      { days: 100, reward: 75 },
+      { days: 200, reward: 100 },
+      { days: 300, reward: 125 },
+      { days: 365, reward: 200 }
+    ];
+
+    const LEVELS = [
+      { name: 'Fada',   min: 0,   max: 49 },
+      { name: 'Sereia', min: 50,  max: 124 },
+      { name: 'Bruxa',  min: 125, max: 249 },
+      { name: 'Deusa',  min: 250, max: Infinity }
+    ];
+
+    const ISABUCKS_MAX = 300;
+    const MAX_STREAK_BONUS = 22;
+    const MONTH_NAMES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+    // Histórico real informado pela usuária: ofensiva começou em 26/07/2026,
+    // save usado em 31/07/2026 (os demais dias entre 26 e 30 foram treinados).
+    const SEED_TRAINING = [
+      { date: '2026-07-26', trained: true },
+      { date: '2026-07-27', trained: true },
+      { date: '2026-07-28', trained: true },
+      { date: '2026-07-29', trained: true },
+      { date: '2026-07-30', trained: true },
+      { date: '2026-07-31', trained: false }
+    ];
+
+    const STORAGE_KEY = "Duorkout_PlayerData_v4";
+
+    let shopCatalog = [...INITIAL_CATALOG];
+
+    let playerData = {
+      name: "Isa Omena", level: "Fada", streak: 0, maxStreak: 0,
+      goal: 20, goalReward: 20, goalRewardMultiplier: 1, saves: 3, isabucks: 0,
+      purchaseHistory: [], trainingHistory: {}, unlockedCollectibles: [],
+      lastRecordedDate: null, customShopItems: [],
+      totalDaysTrained: 0, streakBrokenOnce: false, perfectDayStreak: 0,
+      milestonesThisCycle: [], lastSaveResetMonth: null,
+      nextMonthSavesBonus: 0, nextMonthSavesOverride: null,
+      discountActive: false, freeItemCredit: 0, removedItemCodes: []
+    };
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function fmtDate(y, m0, d) { return `${y}-${pad(m0 + 1)}-${pad(d)}`; }
+
+    function loadPlayerData() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          playerData = { ...playerData, ...JSON.parse(stored) };
+        } catch (e) {}
+      }
+      if (!playerData.removedItemCodes) playerData.removedItemCodes = [];
+      rebuildShopCatalog();
+    }
+
+    function rebuildShopCatalog() {
+      const removed = playerData.removedItemCodes || [];
+      shopCatalog = [...INITIAL_CATALOG, ...(playerData.customShopItems || [])]
+        .filter(item => !removed.includes(item.code));
+    }
+
+    function savePlayerData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(playerData));
+      updateUI();
+    }
+
+    /* ============================================================
+       LÓGICA CENTRAL: registrar um dia (treinado ou não)
+    ============================================================ */
+    let seedingMode = false;
+    let pendingDiceRoll = false;
+    let alertQueue = [];
+
+    function addIsabucks(n) {
+      playerData.isabucks = Math.max(0, Math.min(ISABUCKS_MAX, playerData.isabucks + n));
+    }
+
+    function queueAlert(title, msg) {
+      if (seedingMode) return;
+      alertQueue.push({ title, msg });
+    }
+
+    function ensureMonthlySaves(dateObj) {
+      const ym = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}`;
+      if (playerData.lastSaveResetMonth !== ym) {
+        if (playerData.nextMonthSavesOverride !== null && playerData.nextMonthSavesOverride !== undefined) {
+          playerData.saves = playerData.nextMonthSavesOverride;
+        } else {
+          playerData.saves = Math.min(7, 3 + (playerData.nextMonthSavesBonus || 0));
+        }
+        playerData.nextMonthSavesOverride = null;
+        playerData.nextMonthSavesBonus = 0;
+        playerData.lastSaveResetMonth = ym;
+      }
+    }
+
+    function checkLevel() {
+      const lvl = LEVELS.find(l => playerData.maxStreak >= l.min && playerData.maxStreak <= l.max);
+      if (lvl && lvl.name !== playerData.level) {
+        const old = playerData.level;
+        playerData.level = lvl.name;
+        queueAlert('SUBIU DE NÍVEL! 👑', `Parabéns, você evoluiu de ${old} para ${lvl.name}! A lojinha vai passar por uma reforma em breve, com produtos novos e mais sofisticados. ✨`);
+      }
+    }
+
+    function checkMilestones() {
+      MILESTONES.forEach(m => {
+        if (playerData.streak === m.days && !playerData.milestonesThisCycle.includes(m.days)) {
+          playerData.milestonesThisCycle.push(m.days);
+          addIsabucks(m.reward);
+          queueAlert('MILESTONE! 🏅', `Você bateu ${m.days} dias de ofensiva e ganhou ${m.reward} Isabucks!`);
+        }
+      });
+    }
+
+    function checkGoal() {
+      if (playerData.streak === playerData.goal) {
+        addIsabucks(playerData.goalReward);
+        queueAlert('META ALCANÇADA! 🎯', `Você bateu sua meta de ${playerData.goal} dias e ganhou ${playerData.goalReward} Isabucks! Antes de seguir pra próxima meta, tire um momento pra olhar pra trás e se orgulhar. Essa é a magia do Duorkout. ♡`);
+      }
+    }
+
+    function isMonthPerfect(year, monthIndex) {
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+      for (let d = 1; d <= daysInMonth; d++) {
+        if (playerData.trainingHistory[fmtDate(year, monthIndex, d)] !== 'trained') return false;
+      }
+      return true;
+    }
+
+    function recordDay(ds, trained) {
+      const [y, m, d] = ds.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      ensureMonthlySaves(dateObj);
+
+      if (trained) {
+        playerData.trainingHistory[ds] = 'trained';
+        playerData.streak += 1;
+        playerData.totalDaysTrained += 1;
+        playerData.perfectDayStreak += 1;
+        addIsabucks(3);
+
+        if (playerData.streak > playerData.maxStreak) {
+          const wasBroken = playerData.streakBrokenOnce;
+          playerData.maxStreak = playerData.streak;
+          if (wasBroken) {
+            addIsabucks(MAX_STREAK_BONUS);
+            queueAlert('NOVO RECORDE! ✨', `Você bateu sua maior ofensiva de todos os tempos! +${MAX_STREAK_BONUS} Isabucks.`);
+          }
+        }
+
+        if (playerData.perfectDayStreak > 0 && playerData.perfectDayStreak % 7 === 0) {
+          addIsabucks(7);
+          queueAlert('SEMANA PERFEITA! 🎀', 'Você treinou 7 dias seguidos sem pular nenhum! +7 Isabucks.');
+        }
+
+        checkMilestones();
+        checkGoal();
+        checkLevel();
+      } else {
+        if (playerData.saves > 0) {
+          playerData.saves -= 1;
+          playerData.trainingHistory[ds] = 'saved';
+          playerData.perfectDayStreak = 0;
+        } else {
+          playerData.trainingHistory[ds] = 'lost';
+          playerData.streak = 0;
+          playerData.perfectDayStreak = 0;
+          playerData.streakBrokenOnce = true;
+          playerData.milestonesThisCycle = [];
+        }
+      }
+
+      const daysInMonth = new Date(y, m, 0).getDate();
+      if (d === daysInMonth && isMonthPerfect(y, m - 1) && !seedingMode) {
+        pendingDiceRoll = true;
+      }
+
+      playerData.lastRecordedDate = ds;
+    }
+
+    function seedInitialData() {
+      seedingMode = true;
+      SEED_TRAINING.forEach(entry => recordDay(entry.date, entry.trained));
+      seedingMode = false;
+    }
+
+    /* ============================================================
+       FLUXO DE CHECK-IN DIÁRIO (pergunta os dias pendentes)
+    ============================================================ */
+    let pendingDaysQueue = [];
+
+    function getPendingDays() {
+      const days = [];
+      let start;
+      if (playerData.lastRecordedDate) {
+        const [y, m, d] = playerData.lastRecordedDate.split('-').map(Number);
+        start = new Date(y, m - 1, d + 1);
+      } else {
+        start = new Date();
+      }
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      start.setHours(0, 0, 0, 0);
+      while (start <= today) {
+        days.push(fmtDate(start.getFullYear(), start.getMonth(), start.getDate()));
+        start.setDate(start.getDate() + 1);
+      }
+      return days;
+    }
+
+    function startDailyCheckins() {
+      pendingDaysQueue = getPendingDays();
+      processNextPendingDay();
+    }
+
+    function processNextPendingDay() {
+      if (pendingDaysQueue.length === 0) {
+        finishCheckinFlow();
+        return;
+      }
+      const ds = pendingDaysQueue[0];
+      const [y, m, d] = ds.split('-').map(Number);
+      document.getElementById('modal-daily-text').innerText = `Você treinou no dia ${pad(d)}/${pad(m)}/${y}?`;
+      document.getElementById('modal-daily').classList.add('active');
+    }
+
+    function answerDaily(trained) {
+      const ds = pendingDaysQueue.shift();
+      recordDay(ds, trained);
+      document.getElementById('modal-daily').classList.remove('active');
+      if (pendingDaysQueue.length > 0) {
+        processNextPendingDay();
+      } else {
+        finishCheckinFlow();
+      }
+    }
+
+    function finishCheckinFlow() {
+      savePlayerData();
+      if (pendingDiceRoll) {
+        pendingDiceRoll = false;
+        setTimeout(openDiceModal, 250);
+      } else {
+        setTimeout(processAlertQueue, 250);
+      }
+    }
+
+    function processAlertQueue() {
+      if (alertQueue.length === 0) return;
+      const a = alertQueue.shift();
+      showModalAlert(a.title, a.msg, () => processAlertQueue());
+    }
+
+    /* ============================================================
+       DADO D6 DO MÊS PERFEITO
+    ============================================================ */
+    function openDiceModal() {
+      document.getElementById('dice-result-text').innerText = '';
+      document.getElementById('dice-display').innerText = '🎲';
+      document.getElementById('dice-roll-btn').style.display = 'inline-block';
+      document.getElementById('dice-continue-btn').style.display = 'none';
+      document.getElementById('modal-dice').classList.add('active');
+    }
+
+    function rollDice() {
+      const roll = Math.floor(Math.random() * 6) + 1;
+      const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+      document.getElementById('dice-display').innerText = faces[roll - 1];
+      let text = '';
+      switch (roll) {
+        case 1:
+          addIsabucks(30);
+          text = 'BAÚ DO TESOURO! +30 Isabucks 💰';
+          break;
+        case 2:
+          playerData.discountActive = true;
+          text = 'CUPOM DE DESCONTO! Sua próxima compra na lojinha sai pela metade do preço. 🏷️';
+          break;
+        case 3:
+          playerData.nextMonthSavesBonus = (playerData.nextMonthSavesBonus || 0) + 1;
+          text = 'SAVE EXTRA! Mês que vem você começa com 4 saves. 🛡️';
+          break;
+        case 4:
+          playerData.freeItemCredit = 30;
+          text = 'O CHEFE ENLOUQUECEU! Ganhe um item de até 30 Isabucks de graça na lojinha. 🎁';
+          break;
+        case 5:
+          playerData.goalRewardMultiplier = 2;
+          text = 'META DUPLICADA! A partir de agora, toda nova meta vale o dobro em Isabucks. ✨';
+          break;
+        case 6:
+          playerData.nextMonthSavesOverride = Math.min(7, playerData.saves + 3);
+          text = 'OFERTA DE SAVES! Mês que vem você começa com seus saves atuais +3 (máx. 7). 🎀';
+          break;
+      }
+      document.getElementById('dice-result-text').innerText = text;
+      document.getElementById('dice-roll-btn').style.display = 'none';
+      document.getElementById('dice-continue-btn').style.display = 'inline-block';
+      savePlayerData();
+    }
+
+    function closeDiceModal() {
+      document.getElementById('modal-dice').classList.remove('active');
+      processAlertQueue();
+    }
+
+    /* ============================================================
+       META (OFENSIVA)
+    ============================================================ */
+    function promptNewGoal() {
+      const input = prompt(`Sua ofensiva atual é ${playerData.streak} dias. Qual será sua nova meta (em dias)?`);
+      if (input === null) return;
+      const newGoal = parseInt(input, 10);
+      if (isNaN(newGoal) || newGoal <= playerData.streak) {
+        showModalAlert('ERRO', 'A meta precisa ser um número maior que sua ofensiva atual.');
+        return;
+      }
+      const baseReward = newGoal - playerData.streak;
+      playerData.goal = newGoal;
+      playerData.goalReward = baseReward * (playerData.goalRewardMultiplier || 1);
+      savePlayerData();
+      showModalAlert('NOVA META DEFINIDA ✨', `Meta: ${newGoal} dias. Recompensa ao bater: ${playerData.goalReward} Isabucks.`);
+    }
+
+    /* ============================================================
+       LOJINHA
+    ============================================================ */
+    function addNewShopItem() {
+      const code = document.getElementById('new-item-code').value.trim();
+      const name = document.getElementById('new-item-name').value.trim();
+      const price = parseInt(document.getElementById('new-item-price').value);
+      const isCollectible = document.getElementById('new-item-collectible').value === "true";
+
+      if (!code || !name || isNaN(price)) {
+        showModalAlert("ERRO", "Preencha todos os campos do novo produto.");
+        return;
+      }
+
+      const newItem = {
+        code: code.padStart(2, '0'),
+        name: name,
+        price: price,
+        collectible: isCollectible,
+        id: isCollectible ? 'custom_' + Date.now() : null,
+        emoji: "✨"
+      };
+
+      if (!playerData.customShopItems) playerData.customShopItems = [];
+      playerData.customShopItems.push(newItem);
+      if (playerData.removedItemCodes) {
+        playerData.removedItemCodes = playerData.removedItemCodes.filter(c => c !== newItem.code);
+      }
+      rebuildShopCatalog();
+
+      document.getElementById('new-item-code').value = '';
+      document.getElementById('new-item-name').value = '';
+      document.getElementById('new-item-price').value = '';
+
+      savePlayerData();
+      showModalAlert("SUCESSO", `Produto "${name}" cadastrado na Lojinha com sucesso!`);
+    }
+
+    function removeShopItem() {
+      const item = shopCatalog.find(i => i.code === currentInputCode);
+      const tray = document.getElementById('ui-vending-tray');
+
+      if (!item) {
+        tray.innerText = "CÓDIGO INVÁLIDO";
+        return;
+      }
+
+      const confirmed = confirm(`Remover "${item.name}" (código ${item.code}) da lojinha? Essa ação não pode ser desfeita.`);
+      if (!confirmed) return;
+
+      if (!playerData.removedItemCodes) playerData.removedItemCodes = [];
+      if (!playerData.removedItemCodes.includes(item.code)) {
+        playerData.removedItemCodes.push(item.code);
+      }
+      if (playerData.customShopItems) {
+        playerData.customShopItems = playerData.customShopItems.filter(i => i.code !== item.code);
+      }
+      rebuildShopCatalog();
+
+      tray.innerText = `REMOVIDO: ${item.name.substring(0, 18)}...`;
+      clearNum();
+      savePlayerData();
+    }
+
+    let currentInputCode = "";
+    function pressNum(digit) {
+      if (currentInputCode.length < 2) {
+        currentInputCode += digit;
+        document.getElementById('ui-keypad-code').innerText = currentInputCode.padEnd(2, '_');
+      }
+    }
+
+    function clearNum() {
+      currentInputCode = "";
+      document.getElementById('ui-keypad-code').innerText = "__";
+    }
+
+    function executePurchase() {
+      const item = shopCatalog.find(i => i.code === currentInputCode);
+      const tray = document.getElementById('ui-vending-tray');
+
+      if (!item) {
+        tray.innerText = "CÓDIGO INVÁLIDO";
+        return;
+      }
+
+      if (item.collectible && playerData.unlockedCollectibles.includes(item.id)) {
+        tray.innerText = "COLECIONÁVEL JÁ POSSUÍDO";
+        return;
+      }
+
+      let price = item.price;
+      let usedFreeCredit = false;
+      let usedDiscount = false;
+
+      if (playerData.freeItemCredit >= price) {
+        price = 0;
+        usedFreeCredit = true;
+      } else if (playerData.discountActive) {
+        price = Math.ceil(price / 2);
+        usedDiscount = true;
+      }
+
+      if (playerData.isabucks < price) {
+        tray.innerText = "ISABUCKS INSUFICIENTES";
+        return;
+      }
+
+      playerData.isabucks -= price;
+      if (usedFreeCredit) playerData.freeItemCredit = 0;
+      if (usedDiscount) playerData.discountActive = false;
+
+      if (item.collectible) playerData.unlockedCollectibles.push(item.id);
+      if (item.isSaveExtra) playerData.saves = Math.min(7, playerData.saves + 1);
+      if (item.gives2Saves) playerData.saves = Math.min(7, playerData.saves + 2);
+
+      playerData.purchaseHistory.unshift({
+        name: item.name,
+        pricePaid: price,
+        date: new Date().toLocaleDateString('pt-BR')
+      });
+
+      tray.innerText = `RESGATADO: ${item.name.substring(0, 18)}...`;
+      clearNum();
+      savePlayerData();
+    }
+
+    /* ============================================================
+       RENDERIZAÇÃO
+    ============================================================ */
+    function updateUI() {
+      document.getElementById('ui-level').innerText = `NÍVEL: ${playerData.level.toUpperCase()}`;
+      document.getElementById('ui-shop-level').innerText = `Nível ${playerData.level}`;
+      document.getElementById('nav-shop-level').innerText = `Nível ${playerData.level}`;
+      document.getElementById('ui-streak').innerText = playerData.streak;
+      document.getElementById('ui-max-streak').innerText = playerData.maxStreak;
+      document.getElementById('ui-saves').innerText = playerData.saves;
+      document.getElementById('ui-isabucks').innerText = playerData.isabucks;
+      document.getElementById('ui-shop-isabucks').innerText = playerData.isabucks;
+      document.getElementById('ui-goal-target').innerText = `${playerData.goal} Dias`;
+      document.getElementById('ui-goal-reward').innerText = playerData.goalReward;
+
+      const badgesContainer = document.getElementById('ui-profile-badges');
+      badgesContainer.innerHTML = playerData.unlockedCollectibles
+        .map(id => {
+          const item = shopCatalog.find(i => i.id === id) || COLLECTIBLES_LIST.find(c => c.id === id);
+          return item ? `<span>${item.emoji || '✨'}</span>` : '';
+        }).join('');
+
+      renderMilestones();
+      renderCollectibles();
+      renderShop();
+      renderHistory();
+      renderCalendar();
+    }
+
+    function renderMilestones() {
+      const list = document.getElementById('ui-milestone-list');
+      list.innerHTML = "";
+      MILESTONES.forEach(m => {
+        const done = playerData.maxStreak >= m.days;
+        const div = document.createElement('div');
+        div.className = `milestone-box ${done ? 'done' : ''}`;
+        div.innerHTML = `<div class="milestone-days">${m.days}</div><div class="milestone-reward">${m.reward} 💰</div>`;
+        list.appendChild(div);
+      });
+    }
+
+    function renderCollectibles() {
+      const grid = document.getElementById('ui-trophy-grid');
+      grid.innerHTML = "";
+      document.getElementById('ui-collectibles-count').innerText = playerData.unlockedCollectibles.length;
+
+      COLLECTIBLES_LIST.forEach(col => {
+        const isUnlocked = playerData.unlockedCollectibles.includes(col.id);
+        const div = document.createElement('div');
+        div.className = `trophy-item ${isUnlocked ? 'unlocked' : ''}`;
+        div.innerHTML = `<span style="font-size: 1.2rem;">${isUnlocked ? col.emoji : '🔒'}</span><span class="trophy-name">${col.name}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function renderShop() {
+      const container = document.getElementById('ui-vending-items');
+      container.innerHTML = "";
+      shopCatalog.forEach(item => {
+        const isBoughtCollectible = item.collectible && playerData.unlockedCollectibles.includes(item.id);
+        const div = document.createElement('div');
+        div.className = "capsule";
+        if (isBoughtCollectible) div.style.opacity = "0.3";
+        div.onclick = () => { currentInputCode = item.code; document.getElementById('ui-keypad-code').innerText = item.code; };
+        div.innerHTML = `
+          <div class="capsule-code">${item.code}</div>
+          <div class="capsule-title">${item.name}</div>
+          <div class="capsule-price">${isBoughtCollectible ? 'POSSUÍDO' : item.price + ' Isabucks'}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('ui-history-list');
+      if (playerData.purchaseHistory.length === 0) {
+        list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center;">Nenhuma compra realizada ainda.</div>`;
+        return;
+      }
+      list.innerHTML = playerData.purchaseHistory.map(item => `
+        <div class="history-item">
+          <span>${item.name}</span>
+          <span style="color: var(--gold-accent); font-weight: bold;">-${item.pricePaid} Isabucks (${item.date})</span>
+        </div>
+      `).join('');
+    }
+
+    /* ============================================================
+       CALENDÁRIO NAVEGÁVEL (mostra qualquer mês já registrado)
+    ============================================================ */
+    let viewYear, viewMonth;
+
+    function initCalendarView() {
+      const now = new Date();
+      viewYear = now.getFullYear();
+      viewMonth = now.getMonth();
+    }
+
+    function changeCalendarMonth(delta) {
+      viewMonth += delta;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      document.getElementById('ui-calendar-month').innerText = `${MONTH_NAMES_PT[viewMonth]} ${viewYear}`;
+      const grid = document.getElementById('ui-calendar-grid');
+      grid.innerHTML = "";
+      const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const now = new Date();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = "day empty";
+        grid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = fmtDate(viewYear, viewMonth, day);
+        const status = playerData.trainingHistory[dateStr];
+        const dayDiv = document.createElement('div');
+        dayDiv.className = "day";
+        if (now.getFullYear() === viewYear && now.getMonth() === viewMonth && now.getDate() === day) {
+          dayDiv.classList.add('today');
+        }
+        if (status === "trained") dayDiv.classList.add('trained');
+        else if (status === "saved") dayDiv.classList.add('saved');
+        else if (status === "lost") dayDiv.classList.add('lost');
+        dayDiv.innerText = day;
+        grid.appendChild(dayDiv);
+      }
+    }
+
+    /* ============================================================
+       NAVEGAÇÃO DE ABAS E MODAIS
+    ============================================================ */
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    let alertCallback = null;
+    function showModalAlert(title, msg, callback) {
+      document.getElementById('modal-alert-title').innerText = title;
+      document.getElementById('modal-alert-msg').innerText = msg;
+      alertCallback = callback || null;
+      document.getElementById('modal-alert').classList.add('active');
+    }
+
+    function closeModalAlert() {
+      document.getElementById('modal-alert').classList.remove('active');
+      const cb = alertCallback;
+      alertCallback = null;
+      if (cb) cb();
+    }
+
+    /* ============================================================
+       INICIALIZAÇÃO
+    ============================================================ */
+    window.addEventListener('DOMContentLoaded', () => {
+      initCalendarView();
+      const isFirstRun = !localStorage.getItem(STORAGE_KEY);
+      loadPlayerData();
+      if (isFirstRun) {
+        seedInitialData();
+      }
+      updateUI();
+      startDailyCheckins();
+    });
+  </script>
+</body>
+</html>
