@@ -1333,6 +1333,15 @@
       // Ofensiva nunca chegou a zerar
       playerData.streakBrokenOnce = false;
 
+      // Colecionável já resgatado até o momento do print
+      playerData.unlockedCollectibles = ['debut'];
+
+      // Histórico de compras já realizadas (mais recente primeiro)
+      playerData.purchaseHistory = [
+        { name: "Taylor Swift Debut Album Listen", pricePaid: 5, date: "12/08/2026" },
+        { name: "Organizar a playlist 2026 in Songs", pricePaid: 10, date: "06/08/2026" }
+      ];
+
       playerData.lastRecordedDate = '2026-08-13';
     }
 
