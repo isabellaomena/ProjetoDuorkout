@@ -1107,18 +1107,34 @@
     const MAX_STREAK_BONUS = 22;
     const MONTH_NAMES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
-    // Histórico real informado pela usuária: ofensiva começou em 26/07/2026,
-    // save usado em 31/07/2026 (os demais dias entre 26 e 30 foram treinados).
-    const SEED_TRAINING = [
-      { date: '2026-07-26', trained: true },
-      { date: '2026-07-27', trained: true },
-      { date: '2026-07-28', trained: true },
-      { date: '2026-07-29', trained: true },
-      { date: '2026-07-30', trained: true },
-      { date: '2026-07-31', trained: false }
-    ];
+    // Histórico real informado pela usuária, já com o calendário completo
+    // até 13/08/2026 (dados do print). Dias com save também contam pra
+    // ofensiva atual, então o histórico abaixo é usado apenas para pintar
+    // o calendário — os totais (streak, saves, isabucks) são setados
+    // diretamente logo abaixo, batendo com o que já estava registrado.
+    const SEED_CALENDAR = {
+      '2026-07-26': 'trained',
+      '2026-07-27': 'trained',
+      '2026-07-28': 'trained',
+      '2026-07-29': 'trained',
+      '2026-07-30': 'trained',
+      '2026-07-31': 'saved',
+      '2026-08-01': 'trained',
+      '2026-08-02': 'trained',
+      '2026-08-03': 'trained',
+      '2026-08-04': 'trained',
+      '2026-08-05': 'trained',
+      '2026-08-06': 'trained',
+      '2026-08-07': 'trained',
+      '2026-08-08': 'saved',
+      '2026-08-09': 'saved',
+      '2026-08-10': 'saved',
+      '2026-08-11': 'trained',
+      '2026-08-12': 'trained',
+      '2026-08-13': 'trained'
+    };
 
-    const STORAGE_KEY = "Duorkout_PlayerData_v4";
+    const STORAGE_KEY = "Duorkout_PlayerData_v5";
 
     let shopCatalog = [...INITIAL_CATALOG];
 
@@ -1256,6 +1272,23 @@
           playerData.saves -= 1;
           playerData.trainingHistory[ds] = 'saved';
           playerData.perfectDayStreak = 0;
+
+          // Um dia com save usado mantém a ofensiva viva E também conta
+          // pra ofensiva atual (não é um dia "perdido").
+          playerData.streak += 1;
+
+          if (playerData.streak > playerData.maxStreak) {
+            const wasBroken = playerData.streakBrokenOnce;
+            playerData.maxStreak = playerData.streak;
+            if (wasBroken) {
+              addIsabucks(MAX_STREAK_BONUS);
+              queueAlert('NOVO RECORDE! ✨', `Você bateu sua maior ofensiva de todos os tempos! +${MAX_STREAK_BONUS} Isabucks.`);
+            }
+          }
+
+          checkMilestones();
+          checkGoal();
+          checkLevel();
         } else {
           playerData.trainingHistory[ds] = 'lost';
           playerData.streak = 0;
@@ -1274,9 +1307,33 @@
     }
 
     function seedInitialData() {
-      seedingMode = true;
-      SEED_TRAINING.forEach(entry => recordDay(entry.date, entry.trained));
-      seedingMode = false;
+      // Popula o calendário com os dias já registrados (print de 13/08/2026)
+      playerData.trainingHistory = { ...SEED_CALENDAR };
+
+      const statuses = Object.values(SEED_CALENDAR);
+      playerData.totalDaysTrained = statuses.filter(s => s === 'trained').length;
+
+      // Ofensiva atual: treinos + saves usados contam juntos = 19 dias
+      playerData.streak = 19;
+      playerData.maxStreak = 19;
+
+      // Agosto/2026 já usou os 3 saves do mês (dias 08, 09 e 10)
+      playerData.saves = 0;
+      playerData.lastSaveResetMonth = '2026-08';
+
+      // Isabucks acumulados até o momento do print
+      playerData.isabucks = 60;
+
+      // Milestones de 3, 7 e 13 dias já foram batidos dentro dessa ofensiva
+      playerData.milestonesThisCycle = [3, 7, 13];
+
+      // Última sequência sem pular treino: 11, 12 e 13/08 (após o último save em 10/08)
+      playerData.perfectDayStreak = 3;
+
+      // Ofensiva nunca chegou a zerar
+      playerData.streakBrokenOnce = false;
+
+      playerData.lastRecordedDate = '2026-08-13';
     }
 
     /* ============================================================
